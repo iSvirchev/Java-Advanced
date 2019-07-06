@@ -1,0 +1,76 @@
+package com.company;
+
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int maxCapacity = Integer.parseInt(scanner.nextLine());
+
+        String[] tokens = scanner.nextLine().split("\\s+");
+
+        Map<String, List<Integer>> hallMap = new LinkedHashMap<>();
+        List<String> halls = new ArrayList<>();
+
+        for (int i = tokens.length - 1; i >= 0; i--) {
+            if (!Character.isDigit(tokens[i].charAt(0))) {
+                String hall = tokens[i];
+
+                hallMap.put(hall, new ArrayList<>());
+                hallMap.get(hall).add(0);
+                halls.add(hall);
+            } else {
+                int people = Integer.parseInt(tokens[i]);
+
+                if(people==0)continue;
+
+                if (!hallMap.isEmpty()) {
+                    String hall = halls.get(0);
+                    int currentPeople = getSumOfIntegers(hallMap.get(hall));
+
+                    if (currentPeople + people <= maxCapacity) {
+                        hallMap.get(hall).add(people);
+                    } /*else if (currentPeople + people == maxCapacity) { // check this *maybe combine with the next one
+                        hallMap.get(hall).add(people);
+                        printHall(hallMap, hall);
+                        hallMap.remove(hall);
+                        halls.remove(hall);
+                    }*/ else {
+                        printHall(hallMap, hall);
+                        hallMap.remove(hall);
+                        halls.remove(hall);
+                        if (!halls.isEmpty()) {
+                            hall = halls.get(0);
+                            currentPeople = getSumOfIntegers(hallMap.get(hall));
+
+                            if (currentPeople+people <= maxCapacity){
+                                hallMap.get(hall).add(people);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println();
+    }
+
+    private static void printHall(Map<String, List<Integer>> hallMap, String hall) {
+        hallMap.get(hall).remove(0);
+        if (!hallMap.get(hall).isEmpty()) {
+            System.out.println(hall + " -> " + hallMap.get(hall).toString().replaceAll("\\[|\\]", ""));
+        }
+    }
+
+    private static int getSumOfIntegers(List<Integer> list) {
+        int sum = 0;
+
+        for (Integer integer : list) {
+            sum += integer;
+        }
+
+        return sum;
+    }
+}

@@ -1,0 +1,58 @@
+package com.company;
+
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        ArrayDeque<String> veggieQueue = new ArrayDeque<>();
+        String[] veggies = scanner.nextLine().split("\\s+");
+
+        for (int i = 0; i < veggies.length; i++) {
+            veggieQueue.offer(veggies[i]);
+        }
+
+        ArrayDeque<Integer> calorieStack = new ArrayDeque<>();
+        int[] cals = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        for (int i = 0; i < cals.length; i++) {
+            calorieStack.push(cals[i]);
+        }
+
+        HashMap<String, Integer> veggieCalories = new HashMap<>();
+        veggieCalories.put("tomato",80);
+        veggieCalories.put("carrot",136);
+        veggieCalories.put("lettuce",109);
+        veggieCalories.put("potato",215);
+
+        List<Integer> prepared = new LinkedList<>();
+
+        int tempSalad = 0;
+        while (!calorieStack.isEmpty() && !veggieQueue.isEmpty()){
+            tempSalad = calorieStack.peek();
+            while (!calorieStack.isEmpty() && calorieStack.peek()>0) {
+                if(!veggieQueue.isEmpty()) {
+                    calorieStack.push(calorieStack.pop() - veggieCalories.get(veggieQueue.pop()));
+                }else break;
+
+            }
+            calorieStack.poll();
+            prepared.add(tempSalad);
+        }
+
+        System.out.println(prepared.toString().replaceAll("\\[|\\]|,",""));
+
+        while (veggieQueue.size()>0){
+            System.out.print(veggieQueue.poll() + " ");
+        }
+
+        while(calorieStack.size()>0){
+            System.out.print(calorieStack.pop() + " ");
+        }
+
+    }
+}

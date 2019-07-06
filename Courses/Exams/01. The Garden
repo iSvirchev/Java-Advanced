@@ -1,0 +1,130 @@
+package com.company;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+    static String[][] garden;
+    static Map<String, Integer> harvested;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = Integer.parseInt(scanner.nextLine());
+
+        int index = 0;
+        garden = new String[n][];
+
+
+        while (n-- > 0) {
+            String[] vegetables = scanner.nextLine().split("\\s+");
+            garden[index] = new String[vegetables.length];
+
+            for (int i = 0; i < vegetables.length; i++) {
+                garden[index][i] = vegetables[i];
+            }
+            index++;
+        }
+
+        String input = scanner.nextLine();
+        harvested = new HashMap<>();
+        harvested.put("C", 0);
+        harvested.put("P", 0);
+        harvested.put("L", 0);
+        harvested.put("hurt", 0);
+
+
+        while (!"End of Harvest".equalsIgnoreCase(input)) {
+            String[] tokens = input.split("\\s+");
+
+            int actionRow = Integer.parseInt(tokens[1]);
+            int actionCol = Integer.parseInt(tokens[2]);
+
+            if (tokens.length == 3) { // harvest
+                doHarvest(actionRow, actionCol);
+            } else {
+                doHarm(actionRow, actionCol, tokens[3]);
+            }
+
+            input = scanner.nextLine();
+        }
+
+        for (int row = 0; row < garden.length; row++) {
+            for (int col = 0; col < garden[row].length; col++) {
+                System.out.print(garden[row][col] + " ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("Carrots: " + harvested.get("C"));
+        System.out.println("Potatoes: " + harvested.get("P"));
+        System.out.println("Lettuce: " + harvested.get("L"));
+        System.out.println("Harmed vegetables: " + harvested.get("hurt"));
+    }
+
+    private static boolean checkIndices(int row, int col) {
+        boolean isValid = true;
+
+        if (row < 0 || row >= garden.length || col < 0 || col >= garden[row].length) {
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    private static void doHarvest(int row, int col) {
+        if (checkIndices(row, col)) {
+            String veggie = garden[row][col];
+            if (!veggie.equals(" ")) {
+                harvested.put(veggie, harvested.get(veggie) + 1);
+                garden[row][col] = " ";
+            }
+        }
+
+    }
+
+    private static void doHarm(int row, int col, String direction) {
+        if (checkIndices(row, col)) {
+            if (!garden[row][col].equals(" ")) {
+                garden[row][col] = " ";
+                harvested.put("hurt", harvested.get("hurt") + 1);
+            }
+
+            switch (direction) {
+                case "up":
+                    if (checkIndices(row - 2, col)) {
+                        if (!garden[row - 2][col].equals(" ")) {
+                            garden[row - 2][col] = " ";
+                            harvested.put("hurt", harvested.get("hurt") + 1);
+                        }
+                    }
+                    break;
+                case "down":
+                    if (checkIndices(row + 2, col)) {
+                        if (!garden[row + 2][col].equals(" ")) {
+                            garden[row + 2][col] = " ";
+                            harvested.put("hurt", harvested.get("hurt") + 1);
+                        }
+                    }
+                    break;
+                case "left":
+                    if (checkIndices(row, col - 2)) {
+                        if (!garden[row][col-2].equals(" ")) {
+                            garden[row][col - 2] = " ";
+                            harvested.put("hurt", harvested.get("hurt") + 1);
+                        }
+                    }
+                    break;
+                case "right":
+                    if (checkIndices(row, col + 2)) {
+                        if(!garden[row][col+2].equals(" ")) {
+                            garden[row][col + 2] = " ";
+                            harvested.put("hurt", harvested.get("hurt") + 1);
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+}

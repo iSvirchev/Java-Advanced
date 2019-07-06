@@ -1,0 +1,200 @@
+package com.company;
+
+import java.util.Scanner;
+
+public class Main {
+
+    static int energy;
+    static boolean foundHelen = false;
+    static char[][] field;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        energy = Integer.parseInt(scanner.nextLine());
+        int n = Integer.parseInt(scanner.nextLine());
+
+        field = new char[n][n];
+
+        for (int i = 0; i < n; i++) {
+            field[i] = scanner.nextLine().toCharArray();
+        }
+        boolean parisFound = false;
+        int pRow = 0;
+        int pCol = 0;
+
+        for (int row = 0; row < field.length; row++) {
+            for (int col = 0; col < field[row].length; col++) {
+                if (field[row][col] == 'P') {
+                    pRow = row;
+                    pCol = col;
+                    parisFound = true;
+                    break;
+                }
+            }
+            if (parisFound) break;
+        }
+
+        while (!foundHelen && energy > 0) { // maybe energy >= 0
+            energy--;
+            String[] tokens = scanner.nextLine().split("\\s+");
+            String direction = tokens[0];
+            int rowSpartan = Integer.parseInt(tokens[1]);
+            int colSpartan = Integer.parseInt(tokens[2]);
+
+            field[rowSpartan][colSpartan] = 'S';
+
+            switch (direction) {
+                case "up":
+                    if (pRow - 1 >= 0) {
+                        char destinationChar = field[pRow - 1][pCol];
+
+                        if (destinationChar == '-') {
+                            field[pRow][pCol] = '-';
+                            pRow = pRow - 1;
+                            field[pRow][pCol] = 'P';
+                            if (energy <= 0) {
+                                field[pRow][pCol] = 'X';
+                                break;
+                            }
+
+
+                        } else if (destinationChar == 'S') {
+                            field[pRow][pCol] = '-';
+                            energy -= 2;
+                            if (energy > 0) {
+                                pRow = pRow - 1;
+                                field[pRow][pCol] = 'P';
+
+                            } else {
+                                pRow = pRow - 1;
+                                field[pRow][pCol] = 'X';
+                                break;
+                            }
+                        } else if (destinationChar == 'H') {
+                            field[pRow][pCol] = '-';
+                            field[pRow - 1][pCol] = '-';
+                            foundHelen = true;
+                            break;
+                        }
+                    }
+                    break;
+                case "down":
+                    if (pRow + 1 < field.length) {
+                        char destinationChar = field[pRow + 1][pCol];
+
+                        if (destinationChar == '-') {
+                            field[pRow][pCol] = '-';
+                            pRow = pRow + 1;
+                            field[pRow][pCol] = 'P';
+                            if (energy <= 0) {
+                                field[pRow][pCol] = 'X';
+                                break;
+                            }
+
+                        } else if (destinationChar == 'S') {
+                            field[pRow][pCol] = '-';
+                            energy -= 2;
+                            if (energy > 0) {
+                                pRow = pRow + 1;
+                                field[pRow][pCol] = 'P';
+
+                            } else {
+                                pRow = pRow + 1;
+                                field[pRow][pCol] = 'X';
+                                break;
+                            }
+                        } else if (destinationChar == 'H') {
+                            field[pRow][pCol] = '-';
+                            field[pRow + 1][pCol] = '-';
+                            foundHelen = true;
+                            break;
+                        }
+                    }
+                    break;
+                case "left":
+                    if (pCol - 1 >= 0) {
+                        char destinationChar = field[pRow][pCol - 1];
+
+                        if (destinationChar == '-') {
+                            field[pRow][pCol] = '-';
+                            pCol = pCol - 1;
+                            field[pRow][pCol] = 'P';
+                            if (energy <= 0) {
+                                field[pRow][pCol] = 'X';
+                                break;
+                            }
+
+                        } else if (destinationChar == 'S') {
+                            field[pRow][pCol] = '-';
+                            energy -= 2;
+                            if (energy > 0) {
+                                pCol = pCol - 1;
+                                field[pRow][pCol] = 'P';
+
+                            } else {
+                                pCol = pCol - 1;
+                                field[pRow][pCol] = 'X';
+                                break;
+                            }
+                        } else if (destinationChar == 'H') {
+                            field[pRow][pCol] = '-';
+                            field[pRow][pCol - 1] = '-';
+                            foundHelen = true;
+                            break;
+                        }
+                    }
+                    break;
+                case "right":
+                    if (pCol + 1 < field[pRow].length) {
+                        char destinationChar = field[pRow][pCol + 1];
+
+                        if (destinationChar == '-') {
+                            field[pRow][pCol] = '-';
+                            pCol = pCol + 1;
+                            field[pRow][pCol] = 'P';
+                            if (energy <= 0) {
+                                field[pRow][pCol] = 'X';
+                                break;
+                            }
+
+                        } else if (destinationChar == 'S') {
+                            field[pRow][pCol] = '-';
+                            energy -= 2;
+                            if (energy > 0) {
+                                pCol = pCol + 1;
+                                field[pRow][pCol] = 'P';
+
+                            } else {
+                                pCol = pCol + 1;
+                                field[pRow][pCol] = 'X';
+                                break;
+                            }
+                        } else if (destinationChar == 'H') {
+                            field[pRow][pCol] = '-';
+                            field[pRow][pCol + 1] = '-';
+                            foundHelen = true;
+                            break;
+                        }
+                    }
+                    break;
+            }
+        }
+        if(foundHelen){
+            System.out.println("Paris has successfully abducted Helen! Energy left: "  +energy);
+        }else{
+            System.out.println(String.format("Paris died at %d;%d.",pRow,pCol));
+        }
+        printField();
+    }
+
+
+    private static void printField() {
+        for (int row = 0; row < field.length; row++) {
+            for (int col = 0; col < field[row].length; col++) {
+                System.out.print(field[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}

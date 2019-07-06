@@ -1,0 +1,148 @@
+package com.company;
+
+import java.util.Scanner;
+
+public class Main {
+    static boolean deadPlayer = false;
+    static char[][] matrix;
+    static int rowFP = 0;
+    static int colFP = 0;
+    static int rowSP = 0;
+    static int colSP = 0;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int dimensions = scanner.nextInt();
+        scanner.nextLine();
+
+        matrix = new char[dimensions][dimensions];
+
+
+        for (int i = 0; i < dimensions; i++) {
+            char[] elements = scanner.nextLine().replaceAll("\\s", "").toCharArray();
+
+            for (int j = 0; j < dimensions; j++) {
+                matrix[i][j] = elements[j];
+                if (elements[j] == 'f') {
+                    rowFP = i;
+                    colFP = j;
+                } else if (elements[j] == 's') {
+                    rowSP = i;
+                    colSP = j;
+                }
+            }
+        }
+
+        while (!deadPlayer) {
+            String[] moves = scanner.nextLine().split("\\s+");
+            String directionFP = moves[0];
+            String directionSP = moves[1];
+
+            movePlayer(matrix, directionFP, 'f', rowFP, colFP);
+            if(deadPlayer)break;
+            movePlayer(matrix, directionSP, 's', rowSP, colSP);
+        }
+
+        printMatrix();
+
+    }
+
+    private static void movePlayer(char[][] matrix, String directionFP, char player, int playerRow, int playerCol) {
+        switch (directionFP) {
+            case "down":
+                if (playerRow + 1 < matrix.length) {
+                    if (matrix[playerRow + 1][playerCol] == '*') {
+                        playerRow = playerRow + 1;
+                        matrix[playerRow][playerCol] = player;
+                    } else {
+                        deadPlayer = true;
+                        matrix[playerRow + 1][playerCol] = 'x';
+                    }
+                } else {
+                    if (matrix[0][playerCol] == '*') {
+                        playerRow = 0;
+                        matrix[playerRow][playerCol] = player;
+                    } else {
+                        deadPlayer = true;
+                        matrix[0][playerCol] = 'x';
+                    }
+                }
+                break;
+            case "up":
+                if (playerRow - 1 >= 0) { // if in array bounds
+                    if (matrix[playerRow - 1][playerCol] == '*') { // check if it is free
+                        playerRow = playerRow - 1;
+                        matrix[playerRow][playerCol] = player;
+                    } else {
+                        deadPlayer = true;
+                        matrix[playerRow - 1][playerCol] = 'x';
+                    }
+                } else { // if outside of array - go to last row
+                    if (matrix[matrix.length - 1][playerCol] == '*') {
+                        playerRow = matrix.length - 1;
+                        matrix[playerRow][playerCol] = player;
+                    } else {
+                        deadPlayer = true;
+                        matrix[matrix.length - 1][playerCol] = 'x';
+                    }
+                }
+                break;
+            case "left":
+                if (playerCol - 1 >= 0) {
+                    if (matrix[playerRow][playerCol - 1] == '*') {
+                        playerCol = playerCol - 1;
+                        matrix[playerRow][playerCol] = player;
+                    } else {
+                        deadPlayer = true;
+                        matrix[playerRow][playerCol - 1] = 'x';
+                    }
+                } else {
+                    if (matrix[playerRow][matrix[playerRow].length - 1] == '*') {
+                        playerCol = matrix[playerRow].length - 1;
+                        matrix[playerRow][playerCol] = player;
+                    } else {
+                        deadPlayer = true;
+                        matrix[playerRow][matrix[playerRow].length - 1] = 'x';
+                    }
+                }
+                break;
+            case "right":
+                if (playerCol + 1 < matrix.length) { // inside array bounds
+                    if (matrix[playerRow][playerCol+1] == '*'){
+                        playerCol = playerCol+1;
+                        matrix[playerRow][playerCol] = player;
+                    }else{
+                        deadPlayer = true;
+                        matrix[playerRow][playerCol+1]='x';
+                    }
+                } else {
+                    if (matrix[playerRow][0] == '*'){
+                        playerCol=0;
+                        matrix[playerRow][playerCol] = player;
+                    }else{
+                        deadPlayer = true;
+                        matrix[playerRow][0] = 'x';
+                    }
+                }
+                break;
+        }
+
+        if (player == 'f') {
+            rowFP = playerRow;
+            colFP = playerCol;
+        } else if (player == 's') {
+            rowSP = playerRow;
+            colSP = playerCol;
+        }
+    }
+    
+    private static void printMatrix() {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.print(matrix[i][j] + "");
+            }
+            System.out.println();
+        }
+    }
+}
