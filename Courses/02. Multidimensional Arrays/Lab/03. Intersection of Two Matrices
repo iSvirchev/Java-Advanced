@@ -1,0 +1,47 @@
+package com.company;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int rows = Integer.parseInt(scanner.nextLine());
+        int cols = Integer.parseInt(scanner.nextLine());
+
+        char[][] array1 = new char[rows][cols];
+        char[][] array2 = new char[rows][cols];
+
+        for (int i = 0; i < rows * 2; i++) {
+            String[] elements = scanner.nextLine().split("\\s+");
+
+            for (int col = 0; col < elements.length; col++) {
+                if (i < rows) {
+                    array1[i][col] = elements[col].charAt(0);
+                } else {
+                    array2[i - rows][col] = elements[col].charAt(0);
+                }
+            }
+        }
+
+        char[][] array3 = new char[rows][cols];
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if (array1[row][col] == (array2[row][col])) {
+                    array3[row][col] = array1[row][col];
+                    continue;
+                }
+                array3[row][col] = '*';
+
+            }
+        }
+
+        for (char[] chars : array3) {
+            System.out.println(Arrays.toString(chars).replaceAll("\\[|\\]|,", ""));
+        }
+
+    }
+}

@@ -1,0 +1,209 @@
+package com.company;
+
+import java.util.Scanner;
+
+public class Main {
+    static boolean hit = false;
+    static boolean directHit = false;
+    static boolean poison = false;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        double heiganHP = 3000000;
+        double playerHP = 18500;
+
+        double playerDamage = Double.parseDouble(scanner.nextLine());
+
+        int[][] danceFloor = new int[15][15];
+        int playerRow = 7;
+        int playerCol = 7;
+        danceFloor[playerRow][playerCol] = 1;
+
+        /*printDanceFloor(danceFloor);*/
+
+        int killedBy = 0; // 2 for Eruption - 3 for cloud;
+
+        while (playerHP > 0 || heiganHP > 0) {
+            String[] elements = scanner.nextLine().split("\\s+");
+            String spell = elements[0];
+            int spellRow = Integer.parseInt(elements[1]);
+            int spellCol = Integer.parseInt(elements[2]);
+
+            int heiganDMG = 6000;
+            int situation = 2; // Eruption
+
+            if ("Cloud".equalsIgnoreCase(spell)) {
+                heiganDMG = 3500;
+                situation = 3; // Cloud + poison
+            }
+
+            heiganHP -= playerDamage;
+            if (heiganHP <= 0) {
+                break;
+            }
+            if (poison) {
+                playerHP -= 3500;
+                poison = false;
+            }
+            if (playerHP <= 0) {
+                killedBy = 3;
+                break;
+            }
+
+            hitHere(danceFloor, spellRow, spellCol, situation, playerRow, playerCol);
+
+            /*printDanceFloor(danceFloor);*/
+            boolean escaped = false;
+            if (directHit) {
+                playerHP -= heiganDMG;
+            } else {
+                //TODO: implement escape attempts
+                if (playerRow - 1 >= 0) {
+                    if (danceFloor[playerRow - 1][playerCol] == 0) {
+                        danceFloor[playerRow][playerCol] = 0;
+                        playerRow = playerRow - 1;
+                        danceFloor[playerRow][playerCol] = 1;
+                        escaped = true;
+                    }
+                }
+                if (playerCol + 1 < danceFloor.length && !escaped) {
+                    if (danceFloor[playerRow][playerCol + 1] == 0) {
+                        danceFloor[playerRow][playerCol] = 0;
+                        playerCol = playerCol + 1;
+                        danceFloor[playerRow][playerCol] = 1;
+                        escaped = true;
+                    }
+                }
+                if (playerRow + 1 < danceFloor[playerRow].length && !escaped) {
+                    if (danceFloor[playerRow + 1][playerCol] == 0) {
+                        danceFloor[playerRow][playerCol] = 0;
+                        playerRow = playerRow + 1;
+                        danceFloor[playerRow][playerCol] = 1;
+                        escaped = true;
+                    }
+                }
+                if (playerCol - 1 >= 0 && !escaped) {
+                    if (danceFloor[playerRow][playerCol - 1] == 0) {
+                        danceFloor[playerRow][playerCol] = 0;
+                        playerCol = playerCol - 1;
+                        danceFloor[playerRow][playerCol] = 1;
+                        escaped = true;
+                    }
+                }
+                if (!escaped) {
+                    playerHP -= heiganDMG;
+                    if("Cloud".equalsIgnoreCase(spell))poison=true;
+                }
+
+            }
+
+            if (playerHP <= 0){
+                if("Cloud".equalsIgnoreCase(spell)){
+                    killedBy =3;
+                }else {
+                    killedBy = 2;
+                }
+                break;
+            }
+            hitHere(danceFloor, spellRow, spellCol, 0, playerRow, playerCol);
+            /*printDanceFloor(danceFloor);*/
+            hit = false;
+            directHit = false;
+        }
+
+        if(heiganHP<=0){
+            System.out.println("Heigan: Defeated!");
+        }else{
+            System.out.println(String.format("Heigan: %.2f",heiganHP));
+        }
+        if(playerHP<=0){
+            if(killedBy == 2) {
+                System.out.println("Player: Killed by Eruption");
+            }else if(killedBy ==3){
+                System.out.println("Player: Killed by Plague Cloud");
+            }
+        }else{
+            System.out.println(String.format("Player: %.0f", playerHP));
+        }
+        System.out.println(String.format("Final position: %d, %d",playerRow,playerCol));
+
+    }
+
+    private static void hitHere(int[][] danceFloor, int spellRow, int spellCol, int situation, int playerRow, int playerCol) {
+        if (spellRow == playerRow && spellCol == playerCol) {
+            if (situation == 3) poison = true;
+            directHit = true;
+        } else {
+            danceFloor[spellRow][spellCol] = situation;
+        }
+        if (spellRow - 1 >= 0) {
+            if (danceFloor[spellRow - 1][spellCol] == 1) {
+                hit = true;
+            } else {
+                danceFloor[spellRow - 1][spellCol] = situation;
+            }
+            if (spellCol - 1 >= 0) {
+                if (danceFloor[spellRow - 1][spellCol - 1] == 1) {
+                    hit = true;
+                } else {
+                    danceFloor[spellRow - 1][spellCol - 1] = situation;
+                }
+            }
+            if (spellCol + 1 < danceFloor.length) {
+                if (danceFloor[spellRow - 1][spellCol + 1] == 1) {
+                    hit = true;
+                } else {
+                    danceFloor[spellRow - 1][spellCol + 1] = situation;
+                }
+            }
+        }
+        if (spellRow + 1 < danceFloor.length) {
+            if (danceFloor[spellRow + 1][spellCol] == 1) {
+                hit = true;
+            } else {
+                danceFloor[spellRow + 1][spellCol] = situation;
+            }
+            if (spellCol - 1 >= 0) {
+                if (danceFloor[spellRow + 1][spellCol - 1] == 1) {
+                    hit = true;
+                } else {
+                    danceFloor[spellRow + 1][spellCol - 1] = situation;
+                }
+            }
+            if (spellCol + 1 < danceFloor.length) {
+                if (danceFloor[spellRow + 1][spellCol + 1] == 1) {
+                    hit = true;
+                } else {
+                    danceFloor[spellRow + 1][spellCol + 1] = situation;
+                }
+            }
+        }
+        if (spellCol - 1 >= 0) {
+            if (danceFloor[spellRow][spellCol - 1] == 1) {
+                hit = true;
+            } else {
+                danceFloor[spellRow][spellCol - 1] = situation;
+            }
+        }
+        if (spellCol + 1 < danceFloor.length) {
+            if (danceFloor[spellRow][spellCol + 1] == 1) {
+                hit = true;
+            } else {
+                danceFloor[spellRow][spellCol + 1] = situation;
+            }
+        }
+    }
+
+    private static void printDanceFloor(int[][] danceFloor) {
+        System.out.println("        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4");
+        System.out.println("_____________________________________");
+        for (int i = 0; i < danceFloor.length; i++) {
+            System.out.print(String.format("row: %2d ", i));
+            for (int j = 0; j < danceFloor[i].length; j++) {
+                System.out.print(danceFloor[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}

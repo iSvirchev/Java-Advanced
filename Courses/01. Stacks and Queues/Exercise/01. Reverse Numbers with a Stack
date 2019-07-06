@@ -1,0 +1,26 @@
+package com.company;
+
+import java.util.ArrayDeque;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] input = scanner.nextLine().split(s+);
+        ArrayDequeString stack = new ArrayDeque();
+
+        for (String s  input) {
+            stack.push(s);
+        }
+
+        String output = ;
+
+        while (!stack.isEmpty()){
+            output+= stack.pop() +  ;
+        }
+
+        System.out.println(output.trim());
+    }
+}

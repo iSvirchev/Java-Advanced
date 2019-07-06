@@ -1,0 +1,44 @@
+package com.company;
+
+import java.util.ArrayDeque;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+        if (input.length() % 2 != 0) {
+            System.out.println("NO");
+            return;
+        }
+
+        ArrayDeque<Character> stack = new ArrayDeque<>();
+
+        boolean areBalanced = true;
+        for (int i = 0; i < input.length(); i++) {
+            char current = input.charAt(i);
+
+            if (current == '[' || current == '{' || current == '(') {
+                stack.push(current);
+            } else {
+                char topChar = stack.pop();
+
+                if (current == ']' && topChar != '[') {
+                    areBalanced = false;
+                    break;
+                } else if (current == '}' && topChar != '{') {
+                    areBalanced = false;
+                    break;
+                } else if (current == ')' && topChar != '(') {
+                    areBalanced = false;
+                    break;
+                }
+            }
+        }
+
+        if(areBalanced) System.out.println("YES");
+        else System.out.println("NO");
+    }
+}

@@ -1,0 +1,35 @@
+package com.company;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] rc = Arrays.stream(scanner.nextLine().split(", "))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        int nRows = rc[0];
+        int nCols = rc[1];
+
+        System.out.println(nRows);
+        System.out.println(nCols);
+
+        int sum = 0;
+
+        for (int row = 0; row < nRows; row++) {
+            int[] input = Arrays.stream(scanner.nextLine().split(", "))
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
+
+            for (int i : input) {
+                sum+=i;
+            }
+        }
+
+        System.out.println(sum);
+    }
+}

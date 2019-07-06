@@ -1,0 +1,70 @@
+package com.company;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] rat = scanner.nextLine().split(";");
+
+        String[] robots = new String[rat.length];
+        int[] processTime = new int[rat.length];
+        int[] workTime = new int[rat.length];
+
+        for (int i = 0; i < rat.length; i++) {
+            String[] splitRAT = rat[i].split("-");
+            String name = splitRAT[0];
+            int time = Integer.parseInt(splitRAT[1]);
+
+            robots[i] = name;
+            processTime[i] = time;
+        }
+
+        String initialTime = scanner.nextLine();
+
+        ArrayDeque<String> products = new ArrayDeque<>();
+        String inputProduct = scanner.nextLine();
+
+        while (!"End".equalsIgnoreCase(inputProduct)){
+            products.offer(inputProduct);
+            inputProduct = scanner.nextLine();
+        }
+
+        String[] timeData = initialTime.split(":");
+        int hours = Integer.parseInt(timeData[0]);
+        int minutes = Integer.parseInt(timeData[1]);
+        int seconds = Integer.parseInt(timeData[2]);
+
+        LocalTime time = LocalTime.of(hours,minutes,seconds);
+
+        while (!products.isEmpty()){
+            time = time.plusSeconds(1);
+
+            String product = products.poll();
+            boolean isAssigned = false;
+            for (int i = 0; i < robots.length; i++) {
+                if(workTime[i] == 0 && !isAssigned){
+                    workTime[i]=processTime[i];
+                    isAssigned = true;
+                    printRobotData(robots[i],product,time);
+                }
+
+                if(workTime[i]>0){
+                    workTime[i]--;
+                }
+            }
+            if(!isAssigned){
+                products.offer(product);
+            }
+        }
+    }
+
+    private static void printRobotData(String robot, String product, LocalTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        System.out.println(robot + " - " + product + " [" + time.format(formatter) + "]");
+    }
+}

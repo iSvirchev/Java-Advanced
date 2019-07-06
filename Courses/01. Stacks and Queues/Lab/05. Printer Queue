@@ -1,0 +1,32 @@
+package com.company;
+
+import java.util.ArrayDeque;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        ArrayDeque<String> queue = new ArrayDeque<>();
+
+        String input = scanner.nextLine();
+
+        while (!"print".equalsIgnoreCase(input)) {
+            if (!"cancel".equalsIgnoreCase(input)) {
+                queue.offer(input);
+            } else {
+                if (!queue.isEmpty()) {
+                    System.out.println("Canceled " + queue.poll());
+                } else {
+                    System.out.println("Printer is on standby");
+                }
+            }
+            input = scanner.nextLine();
+        }
+
+        while (!queue.isEmpty()){
+            System.out.println(queue.poll());
+        }
+    }
+}

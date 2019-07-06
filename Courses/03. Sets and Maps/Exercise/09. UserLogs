@@ -1,0 +1,64 @@
+package com.company;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        String regex = "(?<IP>(?<=IP=)\\S+)\\s+.+(?<message>(?<=\\').*)\\'+.+(?<user>(?<=user=).+)";
+        Pattern pattern = Pattern.compile(regex);
+
+        Map<String, LinkedHashMap<String, Integer>> userLogs = new TreeMap<>();
+        Map<String, HashSet<String>> msgs = new HashMap<>();
+
+        while (!"end".equalsIgnoreCase(input)) {
+            Matcher matcher = pattern.matcher(input);
+            String ip = "";
+            String message = "";
+            String user = "";
+
+            while (matcher.find()) {
+                ip = matcher.group("IP");
+                message = matcher.group("message");
+                user = matcher.group("user");
+            }
+
+            if(!userLogs.containsKey(user)){
+                userLogs.put(user, new LinkedHashMap<>());
+                userLogs.get(user).putIfAbsent(ip,1);
+                msgs.putIfAbsent(user,new HashSet<>());
+                msgs.get(user).add(message);
+            }else{
+                if(!userLogs.get(user).containsKey(ip)){
+                    userLogs.get(user).put(ip,1);
+                }else{
+                    if(!msgs.get(user).contains(msgs)){
+                        userLogs.get(user).put(ip,userLogs.get(user).get(ip)+1);
+                    }
+                }
+            }
+
+            input = scanner.nextLine();
+        }
+
+        for (Map.Entry<String, LinkedHashMap<String, Integer>> kvpUserLogs : userLogs.entrySet()) {
+            System.out.println(kvpUserLogs.getKey()+":");
+            int i = 0;
+            for (Map.Entry<String, Integer> kvpIPs : kvpUserLogs.getValue().entrySet()) {
+                i++;
+                int something = kvpUserLogs.getValue().size();
+                if(i<kvpUserLogs.getValue().size()) {
+                    System.out.print(kvpIPs.getKey() + " => " + kvpIPs.getValue() + ", ");
+                }else{
+                    System.out.print(kvpIPs.getKey() + " => " + kvpIPs.getValue() + ".\n");
+                }
+            }
+        }
+    }
+}

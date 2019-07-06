@@ -1,0 +1,36 @@
+package com.company;
+
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = scanner.nextInt();
+        scanner.nextLine();
+
+        Map<String, List<Double>> studentGrades = new TreeMap<>();
+
+        while (n-- > 0){
+            String[] elements = scanner.nextLine().split("\\s+");
+            String student = elements[0];
+            double grade = Double.parseDouble(elements[1]);
+
+            studentGrades.putIfAbsent(student,new LinkedList<>());
+            studentGrades.get(student).add(grade);
+        }
+
+        for (Map.Entry<String, List<Double>> kvp : studentGrades.entrySet()) {
+            String output = kvp.getKey() + " -> ";
+            double sum = 0;
+            for (int i = 0; i < kvp.getValue().size(); i++) {
+                output += String.format("%.2f ",kvp.getValue().get(i));
+                sum += kvp.getValue().get(i);
+            }
+
+            output += String.format("(avg: %.2f)",sum/kvp.getValue().size());
+            System.out.println(output);
+        }
+    }
+}

@@ -1,0 +1,85 @@
+package com.company;
+
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        Map<String, HashSet<String>> decks = new LinkedHashMap<>();
+
+        while (!"JOKER".equalsIgnoreCase(input)) {
+            String[] nameAndCards = input.split(": ");
+            String[] cards = nameAndCards[1].split(", ");
+            String name = nameAndCards[0];
+
+            decks.putIfAbsent(name, new HashSet<>());
+            for (int i = 0; i < cards.length; i++) {
+                decks.get(name).add(cards[i]);
+            }
+
+            input = scanner.nextLine();
+        }
+
+        for (Map.Entry<String, HashSet<String>> kvp : decks.entrySet()) {
+            System.out.print(kvp.getKey());
+            int sum = 0;
+
+            for (String card : kvp.getValue()) {
+                char numberChar = card.charAt(0);
+                char lastChar = card.charAt(card.length()-1);
+
+                int number = 0;
+                int power = 0;
+
+                 if(!Character.isDigit(numberChar)){
+                     switch (numberChar){
+                         case 'J':
+                             number=11;
+                             break;
+                         case 'Q':
+                             number=12;
+                             break;
+                         case 'K':
+                             number=13;
+                             break;
+                         case 'A':
+                             number=14;
+                             break;
+                     }
+                 }else{
+                     if(card.length()==3){
+                        number=10;
+                     }else{
+                        number=Integer.parseInt(String.valueOf(numberChar));
+                     }
+                 }
+
+                 switch (lastChar){
+                     case 'C':
+                         power=1;
+                         break;
+                     case 'D':
+                         power=2;
+                         break;
+                     case 'H':
+                         power=3;
+                         break;
+                     case 'S':
+                         power=4;
+                         break;
+                 }
+                 sum+= power*number;
+
+            }
+            System.out.print(": " +sum +"\n");
+        }
+
+    }
+}

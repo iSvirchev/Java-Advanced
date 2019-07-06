@@ -1,0 +1,43 @@
+package com.company;
+
+import java.util.ArrayDeque;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        ArrayDeque<String> back = new ArrayDeque<>(); // back button
+        ArrayDeque<String> forward = new ArrayDeque<>(); // forward button
+
+        String input = scanner.nextLine();
+
+        while (!"Home".equalsIgnoreCase(input)) {
+            switch (input) {
+                case "forward":
+                    if (forward.isEmpty()) {
+                        System.out.println("no next URLs");
+                    } else {
+                        back.push(forward.peek());
+                        System.out.println(forward.pop());
+                    }
+                    break;
+                case "back":
+                    if (back.size()<=1) {
+                        System.out.println("no previous URLs");
+                    } else {
+                        forward.push(back.pop());
+                        System.out.println(back.peek());
+                    }
+                    break;
+                default:
+                    forward.clear();
+                    back.push(input);
+                    System.out.println(input);
+                    break;
+            }
+            input = scanner.nextLine();
+        }
+    }
+}

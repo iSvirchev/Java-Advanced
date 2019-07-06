@@ -1,0 +1,38 @@
+package com.company;
+
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        HashSet<String> parkingLot = new HashSet<>();
+
+        String input = scanner.nextLine();
+
+        while (!"END".equalsIgnoreCase(input)){
+            String[] elements = input.split(",\\s+");
+
+            String inOrOut = elements[0];
+            String plate = elements[1];
+
+            switch (inOrOut){
+                case "IN":
+                    parkingLot.add(plate);
+                    break;
+                case "OUT":
+                    parkingLot.remove(plate);
+                    break;
+            }
+            input = scanner.nextLine();
+        }
+        if(parkingLot.isEmpty()){
+            System.out.println("Parking Lot is Empty");
+        }else {
+            for (String car : parkingLot) {
+                System.out.println(car);
+            }
+        }
+    }
+}

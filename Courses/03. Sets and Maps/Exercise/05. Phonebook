@@ -1,0 +1,38 @@
+package com.company;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+        Map<String, String> phonebook = new HashMap<>();
+
+        while (!"search".equalsIgnoreCase(input)) {
+            String[] tokens = input.split("-");
+            String name = tokens[0];
+            String number = tokens[1];
+
+            phonebook.put(name, number);
+
+
+            input = scanner.nextLine();
+        }
+
+        input = scanner.nextLine();
+
+        while (!"stop".equalsIgnoreCase(input)) {
+
+            if (phonebook.containsKey(input)) {
+                System.out.println(String.format("%s -> %s", input, phonebook.get(input)));
+            } else {
+                System.out.println(String.format("Contact %s does not exist.", input));
+            }
+            input = scanner.nextLine();
+        }
+    }
+}

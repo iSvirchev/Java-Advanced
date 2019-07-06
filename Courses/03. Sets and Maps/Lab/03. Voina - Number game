@@ -1,0 +1,67 @@
+package com.company;
+
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        ArrayDeque<Integer> first = new ArrayDeque<>();
+        ArrayDeque<Integer> second = new ArrayDeque<>();
+
+        fillStack(first, scanner);
+        fillStack(second, scanner);
+
+        int firstPCard = 0;
+        int secondPCard = 0;
+
+        for (int i = 0; i < 50; i++) {
+            if (first.isEmpty() || second.isEmpty()) break;
+
+            firstPCard = first.pop();
+            secondPCard = second.pop();
+
+            if (firstPCard > secondPCard) {
+                if (!first.contains(firstPCard)) {
+                    first.offer(firstPCard);
+                }
+                if (!first.contains(secondPCard)) {
+                    first.offer(secondPCard);
+                }
+            } else if (firstPCard < secondPCard) {
+                if (!second.contains(firstPCard)) {
+                    second.offer(firstPCard);
+                }
+                if (!second.contains(secondPCard)) {
+                    second.offer(secondPCard);
+                }
+            } else {
+                    first.offer(firstPCard);
+                    second.offer(secondPCard);
+            }
+        }
+
+        if (first.size() > second.size()) {
+            System.out.println("First player win!");
+        } else if (first.size() < second.size()) {
+            System.out.println("Second player win!");
+        } else {
+            System.out.println("Draw!");
+        }
+
+    }
+
+    private static ArrayDeque<Integer> fillStack(ArrayDeque<Integer> arrDeck, Scanner scanner) {
+        int[] cards = Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).toArray();
+
+        for (int i = 0; i < cards.length; i++) {
+            if (!arrDeck.contains(cards[i])) {
+                arrDeck.offer(cards[i]);
+            }
+        }
+
+        return arrDeck;
+    }
+}
+

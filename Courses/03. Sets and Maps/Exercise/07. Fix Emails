@@ -1,0 +1,32 @@
+package com.company;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, String> userEmails = new LinkedHashMap<>();
+
+        while (true) {
+            String name = scanner.nextLine();
+            if ("stop".equalsIgnoreCase(name)) break;
+            String email = scanner.nextLine();
+
+            String domain = email.substring(email.length() - 3, email.length());
+
+            if (!(domain.equalsIgnoreCase(".us")
+                    || domain.equalsIgnoreCase("uk")
+                    || domain.equalsIgnoreCase("com"))) {
+                userEmails.putIfAbsent(name,email);
+            }
+        }
+
+        for (Map.Entry<String, String> kvp : userEmails.entrySet()) {
+            System.out.println(String.format("%s -> %s",kvp.getKey(),kvp.getValue()));
+        }
+    }
+}

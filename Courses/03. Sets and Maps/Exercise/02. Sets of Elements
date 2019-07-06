@@ -1,0 +1,31 @@
+package com.company;
+
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] nm = Arrays.stream(scanner.nextLine().split("\\s+")).mapToInt(Integer::parseInt).toArray();
+        int n = nm[0];
+        int m = nm[1];
+        if(n<=0 || m<=0)return;
+
+        Set<String> nSet = new LinkedHashSet<>();
+        Set<String> repeatSet = new LinkedHashSet<>();
+
+        for (int i = 0; i < n + m; i++) {
+            String number = scanner.nextLine();
+
+            if (i < n) {
+                nSet.add(number);
+            } else {
+                repeatSet.add(number);
+            }
+        }
+        
+        nSet.retainAll(repeatSet);
+        System.out.print(nSet.toString().replaceAll("\\[|\\]|,", ""));
+    }
+}
