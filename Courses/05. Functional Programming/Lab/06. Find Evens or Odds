@@ -1,0 +1,23 @@
+package com.company;
+
+import java.util.Scanner;
+import java.util.stream.IntStream;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int lower = scanner.nextInt();
+        int higher = scanner.nextInt();
+        scanner.nextLine();
+        String oddOrEven = scanner.nextLine();
+
+       IntStream
+                .range(lower, higher + 1)
+                .boxed()
+                .filter(d ->
+                       oddOrEven.equals("odd") ?  d % 2 == 1 : d % 2== 0)
+                .forEach(n -> System.out.print(n + " "));
+    }
+}

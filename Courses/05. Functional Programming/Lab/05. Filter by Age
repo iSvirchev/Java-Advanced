@@ -1,0 +1,53 @@
+package com.company;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        BiPredicate<Map.Entry<String, Integer>, Integer> younger =
+                (person, ageBorder) -> person.getValue() <= ageBorder;
+
+        BiPredicate<Map.Entry<String, Integer>, Integer> older =
+                (person, ageBorder) -> person.getValue() >= ageBorder;
+
+        Consumer<Map.Entry<String, Integer>> printName = name -> System.out.println(name.getKey());
+        Consumer<Map.Entry<String, Integer>> printAge = name -> System.out.println(name.getValue());
+        Consumer<Map.Entry<String, Integer>> printNameAndAge = name -> System.out.println(name.getKey() + " - " + name.getValue());
+
+        int n = Integer.parseInt(scanner.nextLine());
+
+        Map<String, Integer> nameAndAge = new LinkedHashMap<>();
+
+        while (n-- > 0) {
+            String[] input = scanner.nextLine().split(", ");
+            nameAndAge.put(input[0], Integer.parseInt(input[1]));
+        }
+
+        String sortBy = scanner.nextLine();
+        int ageBorder = Integer.parseInt(scanner.nextLine());
+        String displayType = scanner.nextLine();
+
+        nameAndAge.entrySet().stream()
+                .filter(person -> sortBy.equals("younger") ?
+                        younger.test(person, ageBorder) :
+                        older.test(person, ageBorder)
+                )
+                .forEach(person -> {
+                            if (displayType.equals("age")) {
+                                printAge.accept(person);
+                            } else if (displayType.equals("name")) {
+                                printName.accept(person);
+                            } else {
+                                printNameAndAge.accept(person);
+                            }
+                        }
+                );
+    }
+}

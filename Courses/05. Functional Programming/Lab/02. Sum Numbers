@@ -1,0 +1,20 @@
+package com.company;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] numbers = scanner.nextLine().split(", ");
+        System.out.println("Count = " + numbers.length);
+
+        List<Integer> nums = new LinkedList<>();
+
+        Arrays.stream(numbers)
+                .map(Integer::parseInt)
+                .reduce((x,y) -> x+y).ifPresent(s -> System.out.println("Sum = " + s));
+    }
+}

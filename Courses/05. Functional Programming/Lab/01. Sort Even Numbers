@@ -1,0 +1,26 @@
+package com.company;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] numbersStrings = scanner.nextLine().split(", ");
+        List<Integer> numbers = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+
+        numbers = Arrays.stream(numbersStrings)
+                .map(Integer::parseInt)
+                .filter(x -> x % 2 == 0)
+                .collect(Collectors.toList());
+
+
+        System.out.println(numbers.toString().replaceAll("\\[|\\]",""));
+        Collections.sort(numbers);
+        System.out.println(numbers.toString().replaceAll("\\[|\\]",""));
+
+    }
+}

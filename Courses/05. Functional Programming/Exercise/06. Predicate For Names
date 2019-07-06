@@ -1,0 +1,22 @@
+package com.company;
+
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.function.Predicate;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int length = Integer.parseInt(scanner.nextLine());
+
+        String[] strings = scanner.nextLine().split("\\s+");
+
+        Predicate<String> fourOrLess = x -> x.length()<= length;
+
+        Arrays.stream(strings)
+                .filter(fourOrLess)
+                .forEach(s -> System.out.println(s));
+    }
+}

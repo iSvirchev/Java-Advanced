@@ -1,0 +1,37 @@
+package com.company;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = Integer.parseInt(scanner.nextLine());
+        int[] numbers = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        Predicate<Integer> divisible = num -> {
+            boolean isPrintable = true;
+
+            for (int elem : numbers) {
+                if (num % elem != 0){
+                    isPrintable = false;
+                    break;
+                }
+
+            }
+            return isPrintable;
+        };
+
+        for (int i = 1; i <= n; i++) {
+            if (divisible.test(i)) System.out.print(i + " ");
+        }
+    }
+}

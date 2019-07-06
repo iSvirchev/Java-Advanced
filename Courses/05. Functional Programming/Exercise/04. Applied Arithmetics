@@ -1,0 +1,51 @@
+package com.company;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        ArrayList<Integer> numbers = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .boxed()
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        String cmd = scanner.nextLine();
+
+        Consumer<Integer> print = x -> System.out.print(x + " ");
+        Function<ArrayList<Integer>, ArrayList<Integer>> increment = list -> list.stream().map(e -> ++e)
+                .collect(Collectors.toCollection(ArrayList::new));
+        UnaryOperator<ArrayList<Integer>> subtract = list -> list.stream().map(e -> --e)
+                .collect(Collectors.toCollection(ArrayList::new));
+        UnaryOperator<ArrayList<Integer>> multiplyByTwo = list -> list.stream().map(e-> e*=2)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        while (!"end".equals(cmd)) {
+            switch (cmd) {
+                case "print":
+                    numbers.forEach(print);
+                    System.out.println();
+                    break;
+                case "add":
+                    numbers = increment.apply(numbers);
+                    break;
+                case "multiply":
+                    numbers = multiplyByTwo.apply(numbers);
+                    break;
+                case "subtract":
+                    numbers = subtract.apply(numbers);
+                    break;
+            }
+
+            cmd = scanner.nextLine();
+        }
+    }
+}
