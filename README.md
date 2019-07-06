@@ -2,7 +2,7 @@
 [SoftUni Course May 2019](https://softuni.bg/trainings/2350/java-advanced-may-2019) --->
 [Judge](https://judge.softuni.bg/Contests/#!/List/ByCategory/175/Java-Advanced-Exercises)<br/>
 __________________________________<br/>
-
+Course Topics: <br/>
 01. [Stack and Queues](https://github.com/iSvirchev/Java-Advanced/tree/master/Courses/01.%20Stacks%20and%20Queues)<br/>
 02. [Multidimensional Arrays](https://github.com/iSvirchev/Java-Advanced/tree/master/Courses/02.%20Multidimensional%20Arrays)<br/>
 03. [Sets and Maps](https://github.com/iSvirchev/Java-Advanced/tree/master/Courses/03.%20Sets%20and%20Maps)<br/>
